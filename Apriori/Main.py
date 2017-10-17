@@ -4,8 +4,19 @@
 from itertools import chain, combinations
 
 Inputfilename = "datasetA.data"
-OutputFileName = "output.txt"
+OutputFileName = "output1.txt"
 min_support = 0.25
+
+
+
+class Root(object):
+    def __init__(self):
+        self.left = None
+        self.Middle = None 
+        self.hash = 1 
+class interior(object):
+    def __init__(self):
+        self.Father = None
 
 def data_from_csv(filename=Inputfilename,output = OutputFileName):
     f = open(filename, 'r')
@@ -56,4 +67,10 @@ if __name__ == "__main__":
     # data_from_csv()
     f = open(OutputFileName,'r',newline= None)
     apriori(f)
-
+    root = Root()
+    inter = interior()
+    root.left = inter
+    inter.Father = root
+    print(root.left)
+    print(inter.Father.hash)
+    print(ord("C"))
