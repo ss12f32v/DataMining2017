@@ -1,22 +1,11 @@
 
-
-
 from itertools import chain, combinations
 
 Inputfilename = "datasetA.data"
-OutputFileName = "output1.txt"
-min_support = 3
+OutputFileName = "output2.txt"
+min_support = 2
 Round_Number = 3
 
-
-class Root(object):
-    def __init__(self):
-        self.left = None
-        self.Middle = None 
-        self.hash = 1 
-class interior(object):
-    def __init__(self):
-        self.Father = None
 
 def data_from_csv(filename=Inputfilename,output = OutputFileName):
     f = open(filename, 'r')
@@ -79,16 +68,7 @@ def apriori(data, min_support=min_support):
         # print (trash_dict)
         print("After delete pairs which number lower than min support : ", item_dict)
 
-    
-# def Make_dict(Item_set,transaction_list):
-#     item_dict = {}
-#     for i in transaction_list:
-#         for element in i:
-#             if element not in item_dict:
-#                 item_dict[element]= 1 
-#             else : 
-#                 item_dict[element]+=1
-#     return item_dict
+
 
 # Pop element that lower than min_support
 def Pop_from_dict(item_dict):
@@ -113,7 +93,6 @@ def Pop_from_dict(item_dict):
 
 def PlusOne_try(item_dict,trash_dict,flag = True):
     temp_list = []
-    # print(list(item_dict))
     x = list(item_dict)
     y = list(trash_dict)
     if flag:
@@ -159,13 +138,10 @@ def Scan_all_the_file(itemset, transaction_list):
 
 if __name__ == "__main__":
 
-    # data_from_csv()
+    
     f = open(OutputFileName,'r',newline= None)
     apriori(f)
-    # root = Root()
-    # inter = interior()
-    # root.left = inter
-    # inter.Father = root
+   
   
     
 
