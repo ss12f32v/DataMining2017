@@ -31,9 +31,7 @@ def itemset_from_data(data):
     itemset = set()
     transaction_list = list()
     for row in data:
-        # print (row)
         row = list(row.strip().split(' '))
-        # print (row)
 
         transaction_list.append(frozenset(row))
         for item in row:
@@ -65,7 +63,6 @@ def apriori(data, min_support=min_support):
         print("Original Itemset : ",itemset)
         xx = Scan_all_the_file(itemset, transaction_list)
         item_dict, trash_dict = Pop_from_dict(xx)
-        # print (trash_dict)
         print("After delete pairs which number lower than min support : ", item_dict)
 
 
@@ -79,7 +76,6 @@ def Pop_from_dict(item_dict):
     temp_dict = {}
     trash_dict = {}
     for i in item_dict:
-        # print(item_dict[i])
         if item_dict[i] >=  min_support:
             xx.append(i)
         else:
