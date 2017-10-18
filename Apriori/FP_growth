@@ -1,0 +1,14 @@
+
+class treeNode:  
+    def __init__(self,nameValue,numOccur,parentNode):  
+        self.name = nameValue #值  
+        self.count = numOccur #计数  
+        self.nodeLink = None #横向链  
+        self.parent = parentNode #父亲节点  
+        self.children = {}   #儿子节点  
+    def inc(self,numOccur):  
+        self.count += numOccur  
+    def disp(self,ind = 1):   #输出显示  
+        print ' ' * ind,self.name,' ',self.count  
+        for child in self.children.values():  
+            child.disp(ind + 1)  
