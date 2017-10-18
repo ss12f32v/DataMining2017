@@ -1,48 +1,17 @@
 
 from itertools import chain, combinations
+from Data_helper import Loader
 
 Inputfilename = "datasetA.data"
-OutputFileName = "output2.txt"
+OutputFileName = "Data/output2.txt"
 min_support = 2
 Round_Number = 3
 
 
-def data_from_csv(filename=Inputfilename,output = OutputFileName):
-    f = open(filename, 'r')
-    o = open(OutputFileName, "w")
-    Data_list = []
-    start = "1"
-    for line in f:
-        row = line.strip().split('\t')
-        if row[0] != start:   
-            for item in Data_list:
-                item = item+" "
-                o.write(item)
-            o.write("\n")
-            Data_list = []
-            Data_list.append(row[2])
-            start = row[0]
-           
-        else:
-            Data_list.append(row[2])
 
-def itemset_from_data(data):
-    i = 0
-    itemset = set()
-    transaction_list = list()
-    for row in data:
-        row = list(row.strip().split(' '))
 
-        transaction_list.append(frozenset(row))
-        for item in row:
-            if item:
-                itemset.add(frozenset([item]))
-        i+=1
-        
-    return itemset, transaction_list
-
-def apriori(data, min_support=min_support):
-    itemset , transaction_list= itemset_from_data(data)
+def apriori(min_support=min_support):
+    itemset , transaction_list= load.itemset_from_data()
 
     # Pipeline
     # Plus one element(second round)-> Scan all the file - > pop from dict
@@ -63,7 +32,7 @@ def apriori(data, min_support=min_support):
         print("Original Itemset : ",itemset)
         xx = Scan_all_the_file(itemset, transaction_list)
         item_dict, trash_dict = Pop_from_dict(xx)
-        print("After delete pairs which number lower than min support : ", item_dict)
+        print("After delete set which number lower than min support : ", item_dict)
 
 
 
@@ -87,6 +56,7 @@ def Pop_from_dict(item_dict):
 
     return temp_dict,trash_dict
 
+# Plus the element number in the set 
 def PlusOne_try(item_dict,trash_dict,flag = True):
     temp_list = []
     x = list(item_dict)
@@ -110,20 +80,16 @@ def PlusOne_try(item_dict,trash_dict,flag = True):
         temp_list = [set(x) for x in temp_list]
     return temp_list
 
-
+# Count how many times this set is appear in the transaction
 def Scan_all_the_file(itemset, transaction_list):
     item_dict = {}
-    # print("xx",itemset)
     print()
     for i in transaction_list:
         for j in itemset:
-            # print (j)
             j = frozenset(j)
             if  j.issubset(i):
-                # print("check")
                 if j not in item_dict:
                     item_dict[j] = 1
-                    # print("check")
                 else :
                     item_dict[j] +=1
         
@@ -134,9 +100,10 @@ def Scan_all_the_file(itemset, transaction_list):
 
 if __name__ == "__main__":
 
-    
-    f = open(OutputFileName,'r',newline= None)
-    apriori(f)
+
+    # f = open(OutputFileName,'r',newline= None)
+    load = Loader(OutputFileName)
+    apriori()
    
   
     
