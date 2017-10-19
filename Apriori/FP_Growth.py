@@ -10,7 +10,7 @@ class treeNode:
     def inc(self,numOccur):  
         self.count += numOccur  
     def disp(self,ind = 1):   # Print out   
-        print ' ' * ind,self.name,' ',self.count  
+        print (' ' * ind,self.name,' ',self.count) 
         for child in self.children.values():  
             child.disp(ind + 1)  
 
@@ -23,23 +23,35 @@ def createTree(dataSet, minSup=1):
     for trans in dataSet:#统计
         for item in trans:
             headerTable[item] = headerTable.get(item, 0) + dataSet[trans]
+    delete = []
     for k in headerTable.keys():  #移除不满足最小支持度的元素项
         if headerTable[k] < minSup: 
-            del(headerTable[k])
+            # print(k,headerTable[k])
+            delete.append(k)
+            # del(headerTable[k])
+    for i in delete:
+        del(headerTable[i])
     freqItemSet = set(headerTable.keys())
-    print 'freqItemSet: ',freqItemSet
+    print ('freqItemSet: ',freqItemSet)
     if len(freqItemSet) == 0: return None, None  #都不满足，则退出
     for k in headerTable:
         headerTable[k] = [headerTable[k], None] #修改为下一步准备
-    #print 'headerTable: ',headerTable
+    print ('headerTable: ',headerTable)
     retTree = treeNode('Null Set', 1, None) #根节点
     for tranSet, count in dataSet.items():  #第二次遍历
+        # print(tranSet,count)
         localD = {}
         for item in tranSet:  #排序
             if item in freqItemSet:
                 localD[item] = headerTable[item][0]
+        print("local",localD.items())
+        for v in sorted(localD.items(), key=lambda p: p[1], reverse=True):
+            print (v[0])
+
+
         if len(localD) > 0:
             orderedItems = [v[0] for v in sorted(localD.items(), key=lambda p: p[1], reverse=True)]
+            print(orderedItems)
             updateTree(orderedItems, retTree, headerTable, count)#用排序后的频率项进行填充
     return retTree, headerTable 
 
@@ -76,4 +88,16 @@ def createInitSet(dataSet):
     return retDict
 
 simpDat = loadSimpDat()
-print(simpDat)
+# print(simpDat)
+
+initSet = createInitSet(simpDat)
+print("xxx",initSet.items())
+
+FP_tree , Heartab = createTree(initSet ,3 )
+FP_tree.disp()
+
+
+
+
+
+
