@@ -15,8 +15,6 @@ class treeNode:
             child.disp(ind + 1)  
 
 
-
-
 def createTree(dataSet, minSup=1): 
     headerTable = {}
     #遍历数据集两次
@@ -51,7 +49,8 @@ def createTree(dataSet, minSup=1):
 
         if len(localD) > 0:
             orderedItems = [v[0] for v in sorted(localD.items(), key=lambda p: p[1], reverse=True)]
-            print(orderedItems)
+            
+            # print(headerTable)
             updateTree(orderedItems, retTree, headerTable, count)#用排序后的频率项进行填充
     return retTree, headerTable 
 
@@ -87,17 +86,58 @@ def createInitSet(dataSet):
         retDict[frozenset(trans)] = 1
     return retDict
 
-simpDat = loadSimpDat()
-# print(simpDat)
+def ascendTree(leafNode, prefixPath): #迭代回溯整棵树
+    if leafNode.parent != None:
+        prefixPath.append(leafNode.name)
+        ascendTree(leafNode.parent, prefixPath)
 
-initSet = createInitSet(simpDat)
-print("xxx",initSet.items())
+#遍历链表直到到达结尾，每遇到一个元素项都会调用ascendTree()函数来上溯FP树，ing收集所有遇到的元素项的名称    
+def findPrefixPath(basePat, treeNode): 
+    condPats = {}
+    while treeNode != None:
+        prefixPath = []
+        ascendTree(treeNode, prefixPath)
+        if len(prefixPath) > 1: 
+            condPats[frozenset(prefixPath[1:])] = treeNode.count
+        treeNode = treeNode.nodeLink
 
-FP_tree , Heartab = createTree(initSet ,3 )
-FP_tree.disp()
+    return condPats
+
+def mineTree(inTree, headerTable, minSup, preFix, freqItemList):
+    for v in headerTable.items():
+        print (v[0],v[1][0])
+    bigL = [v[0] for v in sorted(headerTable.items(), key=lambda p: p[1][0])]#对头指针表的元素项按照其出现的频率进行排序
+    
+    print(bigL)
+    # for basePat in bigL:  #从头指针的底端开始
+    #     newFreqSet = preFix.copy()
+    #     newFreqSet.add(basePat)
+    #     freqItemList.append(newFreqSet)
+    #     condPattBases = findPrefixPath(basePat, headerTable[basePat][1])
+    #     myCondTree, myHead = createTree(condPattBases, minSup)
+    #     if myHead != None: #递归调用
+    #         print ('conditional tree for: ',newFreqSet)
+    #         myCondTree.disp(1)      
+    #         mineTree(myCondTree, myHead, minSup, newFreqSet, freqItemList)
 
 
 
 
 
+if __name__ == "__main__":
+
+
+
+    simpDat = loadSimpDat()
+    # print(simpDat)
+
+    initSet = createInitSet(simpDat)
+    # print("xxx",initSet.items())
+
+    FP_tree , Headertab = createTree(initSet ,3 )
+    FP_tree.disp()
+    print(Headertab['x'])
+    print(findPrefixPath('x',Headertab['r'][1]))
+    freqItems = []
+    mineTree(FP_tree, Headertab, 3, set([]),freqItems)
 

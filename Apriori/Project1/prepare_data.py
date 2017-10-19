@@ -1,4 +1,4 @@
-f = open("datasetD.data","rb")
+f = open("datasetB.data","rb")
 
 customer_dict = dict()
 
@@ -14,7 +14,7 @@ for transation in f:
 
 f.close()
 
-f = open("customerD.txt","wb")
+f = open("customerB.txt","wb")
 for cid in sorted(customer_dict.keys()):
 	for item in customer_dict[cid]:
 		f.write(item.strip("\r\n")+" ")

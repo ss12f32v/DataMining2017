@@ -1,4 +1,4 @@
-f = open("datasetD.data","rb")
+f = open("datasetB.data","rb")
 
 customer_dict = dict()
 item_dict = []
@@ -20,7 +20,7 @@ for transation in f:
 f.close()
 
 
-f = open("customerD_CSV.txt","wb")
+f = open("customerB_CSV.txt","wb")
 
 item_dict = sorted(item_dict)
 index = 0 

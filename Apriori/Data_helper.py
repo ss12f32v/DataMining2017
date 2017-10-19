@@ -1,15 +1,14 @@
 
-
-
+input_file ="Data/datasetB.data"
 
 class Loader(object):
 
     def __init__(self, datapath):
         self.datapath = datapath
 
-    def data_from_csv(self ,filename ,output):
-        f = open(self.datapath, 'r')
-        o = open(OutputFileName, "w")
+    def data_from_csv(self):
+        f = open(input_file, 'r')
+        o = open(self.datapath, "w")
         Data_list = []
         start = "1"
         for line in f:
@@ -41,3 +40,8 @@ class Loader(object):
             i+=1
             
         return itemset, transaction_list
+
+
+if __name__ == "__main__":
+    load = Loader("outputb.txt")
+    load.data_from_csv()
