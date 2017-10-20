@@ -1,6 +1,5 @@
 import time
-from itertools import chain, combinations
-from Data_helper import Loader
+from Data.Data_helper import Loader
 
 # Inputfilename = "datasetA.data"
 OutputFileName = "Data/outputb.txt"
@@ -33,6 +32,8 @@ def apriori(min_support=min_support):
         xx = Scan_all_the_file(itemset, transaction_list)
         item_dict, trash_dict = Pop_from_dict(xx)
         print("After delete set which number lower than min support : ", len(item_dict))
+        if len(item_dict) == 0:
+            return 
 
 
 
@@ -122,7 +123,6 @@ def Scan_all_the_file(itemset, transaction_list):
 if __name__ == "__main__":
 
 
-    # f = open(OutputFileName,'r',newline= None)
     load = Loader(OutputFileName)
     t0 = time.clock()
     apriori()

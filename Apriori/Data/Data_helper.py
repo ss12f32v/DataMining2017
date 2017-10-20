@@ -25,6 +25,8 @@ class Loader(object):
             else:
                 Data_list.append(row[2])
 
+
+    # For Hash
     def itemset_from_data(self):
         data = open(self.datapath,'r',newline= None)
         i = 0
@@ -40,8 +42,17 @@ class Loader(object):
             i+=1
             
         return itemset, transaction_list
-
+    # For FP-growth
+    def transaction_for_FP(self):
+        data = open(self.datapath,'r',newline= None)
+        OutputList = []
+        for row in data:
+            row = row.strip().split(' ')
+            OutputList.append(row)
+        return (OutputList)
+          
 
 if __name__ == "__main__":
-    load = Loader("outputb.txt")
-    load.data_from_csv()
+    load = Loader("Data/output2.txt")
+    print(load.transaction_for_FP())
+

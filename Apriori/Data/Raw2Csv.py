@@ -1,6 +1,6 @@
 
 
-Input_Raw_Data = "datasetB.data"
+Input_Raw_Data = "RawData/datasetB.data"
 
 Output_csv = "customerB.csv"
 

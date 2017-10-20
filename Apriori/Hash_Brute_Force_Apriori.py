@@ -1,9 +1,9 @@
-from itertools import chain, combinations
-from Data_helper import Loader
+import time
+from Data.Data_helper import Loader
 
 Inputfilename = "datasetA.data"
-OutputFileName = "Data/output2.txt"
-min_support = 2
+OutputFileName = "Data/outputb.txt"
+min_support = 20
 Round_Number = 3
 
 
@@ -20,19 +20,20 @@ def apriori(min_support=min_support):
     item_dict = [set(x) for x in item_dict]
     trash_dict = [set(x) for x in trash_dict]
     print("1 Round........ ")
-    print("Item set higher than min support : ",item_dict)
-    print("Trash loew than min support : ",trash_dict)
+    print("Item set higher than min support : ",len(item_dict))
+    print("Trash loew than min support : ",len(trash_dict))
 
     #start second round 
     for i in range(1,Round_Number):
         print()
         print(i+1,"Round........")
         itemset = PlusOne_try(item_dict, trash_dict)
-        print("Original Itemset : ",itemset)
+        print("Original Itemset : ",len(itemset))
         xx = Scan_all_the_file(itemset, transaction_list)
         item_dict, trash_dict = Pop_from_dict(xx)
-        print("After delete set which number lower than min support : ", item_dict)
-
+        print("After delete set which number lower than min support : ", len(item_dict))
+        if len(item_dict) == 0:
+            return 
 
 
 # Pop element that lower than min_support
@@ -102,4 +103,6 @@ if __name__ == "__main__":
 
     # f = open(OutputFileName,'r',newline= None)
     load = Loader(OutputFileName)
+    t0 = time.clock()
     apriori()
+    print(time.clock() - t0)

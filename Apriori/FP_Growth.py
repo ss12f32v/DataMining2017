@@ -1,4 +1,6 @@
 # coding=utf-8
+from Data_helper import Loader
+
 
 class treeNode:  
     def __init__(self,nameValue,numOccur,parentNode):  
@@ -17,10 +19,18 @@ class treeNode:
 
 def createTree(dataSet, minSup=1): 
     headerTable = {}
-    #遍历数据集两次
-    for trans in dataSet:#统计
+    # Scan through file twice
+    print(dataSet)
+    for trans in dataSet:# Count 
+        print(trans)
         for item in trans:
+            # print(item)
+            # print(headerTable.get(item, 0))
+            # print(trans)
+            # print(dataSet[trans])
             headerTable[item] = headerTable.get(item, 0) + dataSet[trans]
+            print(headerTable[item])
+    print(headerTable)
     delete = []
     for k in headerTable.keys():  #移除不满足最小支持度的元素项
         if headerTable[k] < minSup: 
@@ -30,11 +40,11 @@ def createTree(dataSet, minSup=1):
     for i in delete:
         del(headerTable[i])
     freqItemSet = set(headerTable.keys())
-    print ('freqItemSet: ',freqItemSet)
+    # print ('freqItemSet: ',freqItemSet, '\n')
     if len(freqItemSet) == 0: return None, None  #都不满足，则退出
     for k in headerTable:
         headerTable[k] = [headerTable[k], None] #修改为下一步准备
-    print ('headerTable: ',headerTable)
+    # print ('headerTable: ',headerTable,'\n')
     retTree = treeNode('Null Set', 1, None) #根节点
     for tranSet, count in dataSet.items():  #第二次遍历
         # print(tranSet,count)
@@ -42,9 +52,9 @@ def createTree(dataSet, minSup=1):
         for item in tranSet:  #排序
             if item in freqItemSet:
                 localD[item] = headerTable[item][0]
-        print("local",localD.items())
-        for v in sorted(localD.items(), key=lambda p: p[1], reverse=True):
-            print (v[0])
+        # print("local",localD.items())
+        # for v in sorted(localD.items(), key=lambda p: p[1], reverse=True):
+        #     # print (v)
 
 
         if len(localD) > 0:
@@ -83,7 +93,13 @@ def loadSimpDat():
 def createInitSet(dataSet):
     retDict = {}
     for trans in dataSet:
-        retDict[frozenset(trans)] = 1
+        # retDict[frozenset(trans)] = 1
+        # if retDict[frozenset(trans)] !=0:
+        if  frozenset(trans) in (retDict):
+            retDict[frozenset(trans)] += 1
+        else:
+            retDict[frozenset(trans)] = 1
+           
     return retDict
 
 def ascendTree(leafNode, prefixPath): #迭代回溯整棵树
@@ -104,21 +120,23 @@ def findPrefixPath(basePat, treeNode):
     return condPats
 
 def mineTree(inTree, headerTable, minSup, preFix, freqItemList):
-    for v in headerTable.items():
-        print (v[0],v[1][0])
+    # for v in headerTable.items():
+    #     print ("x",v[0],v[1][0])
     bigL = [v[0] for v in sorted(headerTable.items(), key=lambda p: p[1][0])]#对头指针表的元素项按照其出现的频率进行排序
-    
-    print(bigL)
-    # for basePat in bigL:  #从头指针的底端开始
-    #     newFreqSet = preFix.copy()
-    #     newFreqSet.add(basePat)
-    #     freqItemList.append(newFreqSet)
-    #     condPattBases = findPrefixPath(basePat, headerTable[basePat][1])
-    #     myCondTree, myHead = createTree(condPattBases, minSup)
-    #     if myHead != None: #递归调用
-    #         print ('conditional tree for: ',newFreqSet)
-    #         myCondTree.disp(1)      
-    #         mineTree(myCondTree, myHead, minSup, newFreqSet, freqItemList)
+    # print ("xxxx",bigL)
+    for basePat in bigL:  #从头指针的底端开始
+        newFreqSet = preFix.copy()
+        newFreqSet.add(basePat)
+        
+        freqItemList.append(newFreqSet)
+        condPattBases = findPrefixPath(basePat, headerTable[basePat][1])
+        myCondTree, myHead = createTree(condPattBases, minSup)
+        # print('\n',myHead)
+        if myHead != None: #递归调用
+            print ('conditional tree for: ',newFreqSet)
+            myCondTree.disp(1)      
+            mineTree(myCondTree, myHead, minSup, newFreqSet, freqItemList)
+
 
 
 
@@ -126,18 +144,13 @@ def mineTree(inTree, headerTable, minSup, preFix, freqItemList):
 
 if __name__ == "__main__":
 
+    load = Loader("Data/output3.txt")
 
-
-    simpDat = loadSimpDat()
-    # print(simpDat)
+    simpDat = load.transaction_for_FP()
 
     initSet = createInitSet(simpDat)
-    # print("xxx",initSet.items())
-
     FP_tree , Headertab = createTree(initSet ,3 )
-    FP_tree.disp()
-    print(Headertab['x'])
-    print(findPrefixPath('x',Headertab['r'][1]))
-    freqItems = []
-    mineTree(FP_tree, Headertab, 3, set([]),freqItems)
+    # FP_tree.disp()
+    # freqItems = []
+    # mineTree(FP_tree, Headertab, 2, set([]),freqItems)
 
